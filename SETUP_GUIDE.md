@@ -99,7 +99,7 @@ Go to Table Editor and verify these tables exist:
 
 ### 4.1 Create Paystack Account
 
-1. Go to [paystack.com](https://paystack.com)
+1. Go to [yoco.com](https://www.yoco.com/za/)
 2. Sign up for an account
 3. Complete verification (required for live payments)
 

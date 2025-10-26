@@ -10,8 +10,10 @@ import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import Image from "next/image"
-import { Plus } from "lucide-react"
+import { Plus, MessageCircle, Check } from "lucide-react"
 import { AddressDialog } from "@/components/address-dialog"
+import { WhatsAppMessageButton } from "@/components/whatsapp-message-button"
+import { formatOrderDetailsForCaarl, formatCustomerOrderConfirmation } from "@/lib/whatsapp"
 
 interface CheckoutFormProps {
   cartItems: any[]
@@ -32,6 +34,8 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
   const [appliedDiscount, setAppliedDiscount] = useState<{ code: string; amount: number; codeId: string } | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [showAddressDialog, setShowAddressDialog] = useState(false)
+  const [orderCreated, setOrderCreated] = useState<any>(null)
+  const [showWhatsAppMessages, setShowWhatsAppMessages] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
   const supabase = createClient()
@@ -61,21 +65,36 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
       const { data: { user }, error: authError } = await supabase.auth.getUser()
 
       if (authError) {
-      console.error("Auth error:", authError)
+        console.error("Auth error:", authError)
         throw new Error(`Authentication error: ${authError.message}`)
       }
       
       if (!user) {
-      console.error("No user found in session")
+        console.error("No user found in session")
         throw new Error("Not authenticated - please log in again")
       }
 
-    console.log("User authenticated:", user.id)
+      console.log("User authenticated:", user.id)
+
+      // Get selected address details
+      const selectedAddressData = addresses.find(addr => addr.id === selectedAddress)
+      if (!selectedAddressData) {
+        throw new Error("Selected address not found")
+      }
+
+      // Get user profile for customer name
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .single()
+
+      const customerName = profile?.full_name || userEmail.split('@')[0]
 
       // Generate order number
       const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
 
-      // Create order
+      // Create order with WhatsApp payment status
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert({
@@ -88,13 +107,13 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
           discount_code_id: appliedDiscount?.codeId || null,
           discount_amount: discountAmount,
           status: "pending",
-          payment_status: "pending",
+          payment_status: "awaiting_payment", // New status for WhatsApp flow
         })
         .select()
         .single()
 
       if (orderError) {
-    console.error("Order creation error:", orderError)
+        console.error("Order creation error:", orderError)
         throw new Error(`Failed to create order: ${orderError.message}`)
       }
 
@@ -115,39 +134,54 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
       const { error: itemsError } = await supabase.from("order_items").insert(orderItems)
 
       if (itemsError) {
-    console.error("Order items creation error:", itemsError)
+        console.error("Order items creation error:", itemsError)
         throw new Error(`Failed to create order items: ${itemsError.message}`)
       }
 
-      // Initialize Paystack payment
-      const response = await fetch("/api/paystack/initialize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: userEmail,
-          amount: Math.round(total * 100), // Paystack expects amount in kobo (cents) as integer
-          orderId: order.id,
-          orderNumber: orderNumber,
-        }),
+      // Clear cart after successful order creation
+      const { error: clearCartError } = await supabase
+        .from("cart_items")
+        .delete()
+        .eq("user_id", user.id)
+
+      if (clearCartError) {
+        console.error("Cart clearing error:", clearCartError)
+        // Don't throw error here, order is already created
+      }
+
+      // Prepare order data for WhatsApp messages
+      const orderData = {
+        orderNumber,
+        customerName,
+        customerEmail: userEmail,
+        customerPhone: userPhone || selectedAddressData.phone,
+        deliveryAddress: selectedAddressData,
+        deliveryMethod,
+        deliveryFee,
+        items: cartItems.map(item => ({
+          name: (item.products as any).name,
+          price: (item.products as any).price,
+          quantity: item.quantity,
+          size: item.size,
+          color: item.color,
+        })),
+        subtotal,
+        discountAmount,
+        discountCode: appliedDiscount?.code,
+        total,
+      }
+
+      setOrderCreated({ order, orderData })
+      setShowWhatsAppMessages(true)
+      setIsProcessing(false)
+
+      toast({
+        title: "Order Created Successfully! 🎉",
+        description: "Please send the WhatsApp messages to complete your order.",
       })
 
-      const data = await response.json()
-      
-    console.log("Paystack response:", { status: response.status, data })
-
-      if (!response.ok) {
-        const errorMsg = data.error || data.message || `Payment initialization failed (${response.status})`
-        throw new Error(errorMsg)
-      }
-      
-      if (!data.authorization_url) {
-        throw new Error("Invalid payment response: missing authorization URL")
-      }
-
-      // Redirect to Paystack payment page
-      window.location.href = data.authorization_url
     } catch (error) {
-    console.error("Checkout error:", error)
+      console.error("Checkout error:", error)
       
       let errorMessage = "An unexpected error occurred. Please try again."
       
@@ -162,7 +196,7 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
         } else if ('error' in error) {
           errorMessage = (error as any).error
         } else {
-          errorMessage = "Payment processing failed. Please check your details and try again."
+          errorMessage = "Order processing failed. Please check your details and try again."
         }
       }
       
@@ -173,6 +207,11 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
       })
       setIsProcessing(false)
     }
+  }
+
+  const handleOrderComplete = () => {
+    // Redirect to success page
+    router.push(`/checkout/success?order_id=${orderCreated.order.id}`)
   }
 
   return (
@@ -320,16 +359,85 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
               </div>
             </div>
 
-            <Button
-              onClick={handleCheckout}
-              disabled={isProcessing || !selectedAddress}
-              className="w-full h-12 bg-primary hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
-              size="lg"
-            >
-              {isProcessing ? "Processing Payment..." : "Pay with Paystack"}
-            </Button>
+            {!showWhatsAppMessages ? (
+              <Button
+                onClick={handleCheckout}
+                disabled={isProcessing || !selectedAddress}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Creating Order...
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Create Order
+                  </>
+                )}
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-green-800 mb-2">Order Created Successfully! 🎉</h3>
+                  <p className="text-green-700 text-sm mb-3">
+                    Order #{orderCreated.orderData.orderNumber} has been created. Please send the WhatsApp messages below to complete your order.
+                  </p>
+                </div>
 
-            <p className="text-xs text-center text-muted-foreground">Secure payment powered by Paystack</p>
+                <div className="space-y-3">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 className="font-medium text-blue-800 mb-2">Step 1: Send Order Details to Caarl</h4>
+                    <p className="text-blue-700 text-sm mb-3">
+                      Send your order details to Caarl for payment processing:
+                    </p>
+                    <WhatsAppMessageButton
+                      phoneNumber="+27123456789"
+                      message={formatOrderDetailsForCaarl(orderCreated.orderData)}
+                      label="Send Order to Caarl"
+                    />
+                  </div>
+
+                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                    <h4 className="font-medium text-purple-800 mb-2">Step 2: Confirm Your Order</h4>
+                    <p className="text-purple-700 text-sm mb-3">
+                      Send yourself a copy of the order confirmation:
+                    </p>
+                    <WhatsAppMessageButton
+                      phoneNumber={orderCreated.orderData.customerPhone}
+                      message={formatCustomerOrderConfirmation(orderCreated.orderData)}
+                      label="Send Confirmation to Myself"
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-800 mb-2">What happens next?</h4>
+                  <ul className="text-gray-700 text-sm space-y-1">
+                    <li>• Caarl will receive your order details via WhatsApp</li>
+                    <li>• She will contact you with payment instructions</li>
+                    <li>• Payment can be made via bank transfer or Yoco link</li>
+                    <li>• Your order will be processed once payment is confirmed</li>
+                  </ul>
+                </div>
+
+                <Button
+                  onClick={handleOrderComplete}
+                  className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  <Check className="mr-2 h-4 w-4" />
+                  Complete Order
+                </Button>
+              </div>
+            )}
+
+            <p className="text-xs text-center text-muted-foreground">
+                {showWhatsAppMessages 
+                  ? "Secure payment processing via WhatsApp with Caarl" 
+                  : "Secure payment processing via WhatsApp"
+                }
+              </p>
           </CardContent>
         </Card>
       </div>

@@ -57,7 +57,7 @@ Before you begin, ensure you have the following installed:
 
 You'll also need accounts for:
 - **Supabase** ([Sign up](https://supabase.com/)) - Database and authentication
-- **Paystack** ([Sign up](https://paystack.com/)) - Payment processing
+- **Yoco** ([Sign up](https://www.yoco.com/za/)) - Payment processing
 - **Resend** ([Sign up](https://resend.com/)) - Email notifications
 - **Cloudinary** ([Sign up](https://cloudinary.com/)) - Image hosting and management
 
