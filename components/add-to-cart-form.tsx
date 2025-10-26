@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/hooks/use-toast"
 import { Minus, Plus, ShoppingBag } from "lucide-react"
+import { guestCartUtils } from "@/lib/guest-checkout"
 
 interface AddToCartFormProps {
   productId: string
@@ -35,15 +36,24 @@ export function AddToCartForm({ productId, sizes, colors, stockQuantity }: AddTo
       } = await supabase.auth.getUser()
 
       if (!user) {
-        toast({
-          title: "Please sign in",
-          description: "You need to be signed in to add items to your cart.",
-          variant: "destructive",
+        // Guest user - use localStorage
+        guestCartUtils.addItem({
+          product_id: productId,
+          quantity,
+          size: selectedSize,
+          color: selectedColor,
         })
-        router.push("/auth/login")
+
+        toast({
+          title: "Added to cart",
+          description: "Item has been added to your shopping cart.",
+        })
+
+        router.refresh()
         return
       }
 
+      // Authenticated user - use database
       // Check if item already exists in cart
       const { data: existingItem } = await supabase
         .from("cart_items")

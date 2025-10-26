@@ -56,12 +56,12 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">WhatsApp</h3>
                     <a
-                      href="https://wa.me/27123456789"
+                      href="https://wa.me/27634009626"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +27 12 345 6789
+                      +27 63 400 9626
                     </a>
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function ContactPage() {
                 Send Email
               </a>
               <a
-                href="https://wa.me/27123456789"
+                href="https://wa.me/27634009626"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors"

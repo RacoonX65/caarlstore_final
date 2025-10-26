@@ -1,7 +1,6 @@
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { createClient } from "@/lib/supabase/server"
-import { redirect } from "next/navigation"
 import { CartItems } from "@/components/cart-items"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -13,33 +12,36 @@ export default async function CartPage() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect("/auth/login")
-  }
+  // Fetch cart items with product details (only for authenticated users)
+  let cartItems = null
+  let subtotal = 0
 
-  // Fetch cart items with product details
-  const { data: cartItems } = await supabase
-    .from("cart_items")
-    .select(
-      `
-      *,
-      products (
-        id,
-        name,
-        price,
-        image_url,
-        stock_quantity
+  if (user) {
+    const { data } = await supabase
+      .from("cart_items")
+      .select(
+        `
+        *,
+        products (
+          id,
+          name,
+          price,
+          image_url,
+          stock_quantity
+        )
+      `,
       )
-    `,
-    )
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
 
-  const subtotal =
-    cartItems?.reduce((sum, item) => {
-      const product = item.products as any
-      return sum + product.price * item.quantity
-    }, 0) || 0
+    cartItems = data
+
+    subtotal =
+      cartItems?.reduce((sum, item) => {
+        const product = item.products as any
+        return sum + product.price * item.quantity
+      }, 0) || 0
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -53,35 +55,12 @@ export default async function CartPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Cart Items */}
               <div className="lg:col-span-2">
-                <CartItems items={cartItems} />
+                <CartItems cartItems={cartItems || []} user={user} />
               </div>
 
-              {/* Order Summary */}
               <div className="lg:col-span-1">
-                <div className="bg-card border rounded-lg p-6 sticky top-24">
-                  <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal</span>
-                      <span className="font-medium">R {subtotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Delivery</span>
-                      <span className="font-medium">Calculated at checkout</span>
-                    </div>
-                    <div className="border-t pt-4">
-                      <div className="flex justify-between text-lg font-semibold">
-                        <span>Total</span>
-                        <span>R {subtotal.toFixed(2)}</span>
-                      </div>
-                    </div>
-                    <Button asChild className="w-full h-12 bg-primary hover:bg-accent" size="lg">
-                      <Link href="/checkout">Proceed to Checkout</Link>
-                    </Button>
-                    <Button asChild variant="outline" className="w-full bg-transparent" size="lg">
-                      <Link href="/products">Continue Shopping</Link>
-                    </Button>
-                  </div>
+                <div className="mt-8">
+                  {/* This div will be updated by the CartItems component based on cart state */}
                 </div>
               </div>
             </div>

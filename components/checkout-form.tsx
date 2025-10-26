@@ -14,6 +14,7 @@ import { Plus, MessageCircle, Check } from "lucide-react"
 import { AddressDialog } from "@/components/address-dialog"
 import { WhatsAppMessageButton } from "@/components/whatsapp-message-button"
 import { formatOrderDetailsForCaarl, formatCustomerOrderConfirmation } from "@/lib/whatsapp"
+import { validateOrder, logValidationViolation, formatValidationErrors, type AuthenticatedOrderData } from "@/lib/order-validation"
 
 interface CheckoutFormProps {
   cartItems: any[]
@@ -91,6 +92,52 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
 
       const customerName = profile?.full_name || userEmail.split('@')[0]
 
+      // Prepare order data for comprehensive validation
+      const validationOrderData: AuthenticatedOrderData = {
+        userId: user.id,
+        addressId: selectedAddress,
+        cartItems: cartItems.map(item => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+          price: (item.products as any).price,
+        })),
+        deliveryMethod: deliveryMethod,
+        deliveryFee: deliveryFee,
+        subtotal: subtotal,
+        discountCode: appliedDiscount?.code,
+        discountAmount: discountAmount,
+        total: total,
+      }
+
+      // Run comprehensive validation
+      const validationResult = await validateOrder(validationOrderData)
+
+      // Handle validation errors
+      if (!validationResult.isValid) {
+        const errorMessage = formatValidationErrors(validationResult.errors)
+        
+        // Log validation violations for audit
+        await logValidationViolation(validationOrderData, validationResult.errors)
+        
+        toast({
+          title: "Order validation failed",
+          description: errorMessage,
+          variant: "destructive",
+        })
+        setIsProcessing(false)
+        return
+      }
+
+      // Show warnings if any
+      if (validationResult.warnings.length > 0) {
+        const warningMessage = formatValidationErrors(validationResult.warnings)
+        toast({
+          title: "Order warnings",
+          description: warningMessage,
+          variant: "default",
+        })
+      }
+
       // Generate order number
       const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
 
@@ -150,7 +197,7 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
       }
 
       // Prepare order data for WhatsApp messages
-      const orderData = {
+      const whatsappOrderData = {
         orderNumber,
         customerName,
         customerEmail: userEmail,
@@ -171,7 +218,7 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
         total,
       }
 
-      setOrderCreated({ order, orderData })
+      setOrderCreated({ order, orderData: whatsappOrderData })
       setShowWhatsAppMessages(true)
       setIsProcessing(false)
 
@@ -393,7 +440,7 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
                       Send your order details to Caarl for payment processing:
                     </p>
                     <WhatsAppMessageButton
-                      phoneNumber="+27123456789"
+                      phoneNumber="+27634009626"
                       message={formatOrderDetailsForCaarl(orderCreated.orderData)}
                       label="Send Order to Caarl"
                     />
