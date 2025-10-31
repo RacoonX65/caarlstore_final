@@ -3,7 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, XCircle, Info, RefreshCw } from "lucide-react"
-import { OrderValidationError } from "@/lib/order-validation"
+import { OrderValidationError } from "@/lib/order-validation-client"
 
 interface OrderErrorHandlerProps {
   errors: OrderValidationError[]

@@ -14,7 +14,7 @@ import { Plus, MessageCircle, Check } from "lucide-react"
 import { AddressDialog } from "@/components/address-dialog"
 import { WhatsAppMessageButton } from "@/components/whatsapp-message-button"
 import { formatOrderDetailsForCaarl, formatCustomerOrderConfirmation } from "@/lib/whatsapp"
-import { validateOrder, logValidationViolation, formatValidationErrors, type AuthenticatedOrderData } from "@/lib/order-validation"
+import { validateOrderClient, formatValidationErrors, type AuthenticatedOrderData } from "@/lib/order-validation-client"
 
 interface CheckoutFormProps {
   cartItems: any[]
@@ -109,15 +109,12 @@ export function CheckoutForm({ cartItems, addresses, subtotal, userEmail, userPh
         total: total,
       }
 
-      // Run comprehensive validation
-      const validationResult = await validateOrder(validationOrderData)
+      // Run client-side validation
+      const validationResult = validateOrderClient(validationOrderData)
 
       // Handle validation errors
       if (!validationResult.isValid) {
         const errorMessage = formatValidationErrors(validationResult.errors)
-        
-        // Log validation violations for audit
-        await logValidationViolation(validationOrderData, validationResult.errors)
         
         toast({
           title: "Order validation failed",
