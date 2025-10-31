@@ -167,7 +167,7 @@ export function InlineImageUpload({
                 type="button"
                 variant="destructive"
                 size="sm"
-                className="absolute -top-2 -right-2 w-8 h-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity min-h-[32px] min-w-[32px] touch-manipulation"
+                className="absolute -top-2 -right-2 w-8 h-8 rounded-full p-0 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity min-h-[32px] min-w-[32px] touch-manipulation"
                 onClick={() => removeImage(index)}
               >
                 <X className="w-4 h-4" />
