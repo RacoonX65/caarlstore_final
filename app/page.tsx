@@ -114,44 +114,44 @@ export default async function HomePage() {
               <h2 className="text-3xl md:text-4xl font-serif font-semibold mb-4">Shop by Category</h2>
               <p className="text-muted-foreground">Find exactly what you're looking for</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8">
               <Link
                 href="/products?category=clothing"
-                className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
+                className="group relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full bg-muted hover:shadow-xl transition-shadow flex-shrink-0"
               >
                 <div 
                   className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
                   style={{ backgroundImage: 'url(/clothing-bg.svg)' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
-                <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
-                  <h3 className="text-3xl font-serif font-semibold text-white">Clothing</h3>
+                <div className="absolute inset-0 flex items-center justify-center p-4 z-20">
+                  <h3 className="text-lg md:text-xl font-serif font-semibold text-white text-center">Clothing</h3>
                 </div>
               </Link>
               <Link
                 href="/products?category=sneakers"
-                className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
+                className="group relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full bg-muted hover:shadow-xl transition-shadow flex-shrink-0"
               >
                 <div 
                   className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
                   style={{ backgroundImage: 'url(/sneakers-bg.svg)' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
-                <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
-                  <h3 className="text-3xl font-serif font-semibold text-white">Sneakers</h3>
+                <div className="absolute inset-0 flex items-center justify-center p-4 z-20">
+                  <h3 className="text-lg md:text-xl font-serif font-semibold text-white text-center">Sneakers</h3>
                 </div>
               </Link>
               <Link
                 href="/products?category=perfumes"
-                className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
+                className="group relative w-32 h-32 md:w-40 md:h-40 overflow-hidden rounded-full bg-muted hover:shadow-xl transition-shadow flex-shrink-0"
               >
                 <div 
                   className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
                   style={{ backgroundImage: 'url(/perfumes-bg.svg)' }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
-                <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
-                  <h3 className="text-3xl font-serif font-semibold text-white">Perfumes</h3>
+                <div className="absolute inset-0 flex items-center justify-center p-4 z-20">
+                  <h3 className="text-lg md:text-xl font-serif font-semibold text-white text-center">Perfumes</h3>
                 </div>
               </Link>
             </div>
