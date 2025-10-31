@@ -155,16 +155,16 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-[90vw] max-h-[85vh] overflow-y-auto p-6">
-        <DialogHeader className="mb-4">
-          <DialogTitle className="text-xl">{product ? "Edit Product" : "Add New Product"}</DialogTitle>
+      <DialogContent className="w-[95vw] max-w-4xl max-h-[90vh] overflow-y-auto p-3 sm:p-6 m-2">
+        <DialogHeader className="mb-3 sm:mb-4">
+          <DialogTitle className="text-lg sm:text-xl">{product ? "Edit Product" : "Add New Product"}</DialogTitle>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
           {/* Product Form Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Product Details</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold border-b pb-2">Product Details</h3>
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Product Name</Label>
@@ -173,6 +173,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                     value={formData.name}
                     onChange={(e) => updateFormField('name', e.target.value)}
                     required
+                    className="min-h-[44px] touch-manipulation"
                   />
                 </div>
 
@@ -184,10 +185,11 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                     onChange={(e) => updateFormField('description', e.target.value)}
                     rows={3}
                     required
+                    className="min-h-[88px] touch-manipulation"
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="price">Price (R)</Label>
                     <Input
@@ -197,6 +199,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                       value={formData.price}
                       onChange={(e) => updateFormField('price', e.target.value)}
                       required
+                      className="min-h-[44px] touch-manipulation"
                     />
                   </div>
 
@@ -208,18 +211,19 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                       value={formData.stock_quantity}
                       onChange={(e) => updateFormField('stock_quantity', e.target.value)}
                       required
+                      className="min-h-[44px] touch-manipulation"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
                     <select
                       id="category"
                       value={formData.category}
                       onChange={(e) => updateFormField('category', e.target.value)}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring touch-manipulation"
                       required
                     >
                       {CATEGORIES.map((cat) => (
@@ -236,11 +240,12 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                       id="subcategory"
                       value={formData.subcategory}
                       onChange={(e) => updateFormField('subcategory', e.target.value)}
+                      className="min-h-[44px] touch-manipulation"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="sizes">Sizes (comma-separated)</Label>
                     <Input
@@ -248,6 +253,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                       value={formData.sizes}
                       onChange={(e) => updateFormField('sizes', e.target.value)}
                       placeholder="XS, S, M, L, XL"
+                      className="min-h-[44px] touch-manipulation"
                     />
                   </div>
 
@@ -258,15 +264,17 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                       value={formData.colors}
                       onChange={(e) => updateFormField('colors', e.target.value)}
                       placeholder="Black, White, Blue"
+                      className="min-h-[44px] touch-manipulation"
                     />
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3 py-2">
                   <Checkbox
                     id="is_featured"
                     checked={formData.is_featured}
                     onCheckedChange={(checked) => updateFormField('is_featured', checked as boolean)}
+                    className="min-w-[20px] min-h-[20px] touch-manipulation"
                   />
                   <Label htmlFor="is_featured" className="text-sm font-normal cursor-pointer">
                     Feature this product on homepage
@@ -274,11 +282,20 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
-                <Button type="button" variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => onOpenChange(false)} 
+                  className="flex-1 min-h-[44px] touch-manipulation"
+                >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={isLoading} className="flex-1 bg-primary hover:bg-accent">
+                <Button 
+                  type="submit" 
+                  disabled={isLoading} 
+                  className="flex-1 min-h-[44px] touch-manipulation bg-primary hover:bg-accent"
+                >
                   {isLoading ? "Saving..." : "Save Product"}
                 </Button>
               </div>
@@ -286,8 +303,8 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
           </div>
 
           {/* Image Upload Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold border-b pb-2">Product Images</h3>
+          <div className="space-y-3 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold border-b pb-2">Product Images</h3>
             <InlineImageUpload
               onUploadComplete={handleUploadComplete}
               existingImages={productImages}
