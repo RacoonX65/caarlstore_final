@@ -1,0 +1,44 @@
+<svg width="400" height="320" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sneakersGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8D5D0;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#D4C4B8;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#C2B5A8;stop-opacity:0.9" />
+    </linearGradient>
+    <pattern id="sneakersPattern" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M15 5 L25 15 L15 25 L5 15 Z" fill="#FFFFFF" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="320" fill="url(#sneakersGradient)"/>
+  <rect width="400" height="320" fill="url(#sneakersPattern)"/>
+  
+  <!-- Sneaker silhouette -->
+  <path d="M80 160 C80 150, 90 140, 100 140 L280 140 C290 140, 300 145, 310 155 L320 165 C325 170, 325 175, 320 180 L310 190 C300 200, 290 205, 280 205 L120 205 C100 205, 85 195, 80 180 Z" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Sneaker sole -->
+  <path d="M85 180 L315 180 C320 180, 325 185, 325 190 L325 200 C325 205, 320 210, 315 210 L85 210 C80 210, 75 205, 75 200 L75 190 C75 185, 80 180, 85 180 Z" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Laces -->
+  <ellipse cx="150" cy="155" rx="3" ry="5" fill="#FFFFFF" opacity="0.6"/>
+  <ellipse cx="170" cy="155" rx="3" ry="5" fill="#FFFFFF" opacity="0.6"/>
+  <ellipse cx="190" cy="155" rx="3" ry="5" fill="#FFFFFF" opacity="0.6"/>
+  <ellipse cx="210" cy="155" rx="3" ry="5" fill="#FFFFFF" opacity="0.6"/>
+  <ellipse cx="230" cy="155" rx="3" ry="5" fill="#FFFFFF" opacity="0.6"/>
+  
+  <!-- Dynamic elements -->
+  <path d="M50 80 L70 100 L50 120 L30 100 Z" fill="#FFFFFF" opacity="0.3"/>
+  <path d="M350 200 L370 220 L350 240 L330 220 Z" fill="#FFFFFF" opacity="0.3"/>
+  <path d="M320 60 L340 80 L320 100 L300 80 Z" fill="#FFFFFF" opacity="0.2"/>
+  
+  <!-- Speed lines -->
+  <path d="M60 50 L120 50" stroke="#FFFFFF" stroke-width="2" opacity="0.4"/>
+  <path d="M70 70 L130 70" stroke="#FFFFFF" stroke-width="2" opacity="0.3"/>
+  <path d="M80 90 L140 90" stroke="#FFFFFF" stroke-width="2" opacity="0.2"/>
+  
+  <!-- Athletic elements -->
+  <circle cx="350" cy="120" r="8" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="60" cy="200" r="12" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="340" cy="280" r="6" fill="#FFFFFF" opacity="0.5"/>
+</svg>

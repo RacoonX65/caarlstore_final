@@ -119,31 +119,40 @@ export default async function HomePage() {
                 href="/products?category=clothing"
                 className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
               >
+                <div 
+                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                  style={{ backgroundImage: 'url(/clothing-bg.svg)' }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
                 <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
                   <h3 className="text-3xl font-serif font-semibold text-white">Clothing</h3>
                 </div>
-                <div className="absolute inset-0 bg-secondary group-hover:scale-105 transition-transform duration-300" />
               </Link>
               <Link
                 href="/products?category=sneakers"
                 className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
               >
+                <div 
+                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                  style={{ backgroundImage: 'url(/sneakers-bg.svg)' }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
                 <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
                   <h3 className="text-3xl font-serif font-semibold text-white">Sneakers</h3>
                 </div>
-                <div className="absolute inset-0 bg-accent group-hover:scale-105 transition-transform duration-300" />
               </Link>
               <Link
                 href="/products?category=perfumes"
                 className="group relative h-80 overflow-hidden rounded-lg bg-muted hover:shadow-xl transition-shadow"
               >
+                <div 
+                  className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300"
+                  style={{ backgroundImage: 'url(/perfumes-bg.svg)' }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent z-10" />
                 <div className="absolute inset-0 flex items-end justify-center p-8 z-20">
                   <h3 className="text-3xl font-serif font-semibold text-white">Perfumes</h3>
                 </div>
-                <div className="absolute inset-0 bg-primary group-hover:scale-105 transition-transform duration-300" />
               </Link>
             </div>
           </div>

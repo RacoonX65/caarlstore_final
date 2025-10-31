@@ -1,0 +1,60 @@
+<svg width="400" height="320" viewBox="0 0 400 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="perfumesGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F7C8D7;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#E8B5C8;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#D4A5B8;stop-opacity:0.9" />
+    </linearGradient>
+    <radialGradient id="perfumeSpray" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0.1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="320" fill="url(#perfumesGradient)"/>
+  
+  <!-- Perfume bottle -->
+  <rect x="180" y="120" width="40" height="80" rx="5" fill="#FFFFFF" opacity="0.5"/>
+  <rect x="185" y="100" width="30" height="25" rx="3" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="195" y="90" width="10" height="15" rx="2" fill="#FFFFFF" opacity="0.7"/>
+  
+  <!-- Perfume spray effect -->
+  <circle cx="200" cy="85" r="15" fill="url(#perfumeSpray)"/>
+  <circle cx="210" cy="75" r="8" fill="url(#perfumeSpray)"/>
+  <circle cx="190" cy="70" r="6" fill="url(#perfumeSpray)"/>
+  <circle cx="220" cy="65" r="4" fill="url(#perfumeSpray)"/>
+  
+  <!-- Decorative flowers -->
+  <g transform="translate(100, 180)">
+    <circle cx="0" cy="0" r="8" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="8" cy="8" r="6" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="-8" cy="8" r="6" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="8" cy="-8" r="6" fill="#FFFFFF" opacity="0.3"/>
+    <circle cx="-8" cy="-8" r="6" fill="#FFFFFF" opacity="0.3"/>
+  </g>
+  
+  <g transform="translate(300, 100)">
+    <circle cx="0" cy="0" r="6" fill="#FFFFFF" opacity="0.5"/>
+    <circle cx="6" cy="6" r="4" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="-6" cy="6" r="4" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="6" cy="-6" r="4" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="-6" cy="-6" r="4" fill="#FFFFFF" opacity="0.4"/>
+  </g>
+  
+  <!-- Elegant swirls -->
+  <path d="M80 80 Q120 60, 160 80 Q200 100, 240 80" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.3"/>
+  <path d="M60 240 Q100 220, 140 240 Q180 260, 220 240" stroke="#FFFFFF" stroke-width="2" fill="none" opacity="0.3"/>
+  
+  <!-- Luxury elements -->
+  <circle cx="320" cy="200" r="10" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="80" cy="120" r="8" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="350" cy="260" r="6" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="50" cy="60" r="12" fill="#FFFFFF" opacity="0.2"/>
+  
+  <!-- Sparkle effects -->
+  <path d="M120 60 L125 65 L120 70 L115 65 Z" fill="#FFFFFF" opacity="0.6"/>
+  <path d="M280 160 L285 165 L280 170 L275 165 Z" fill="#FFFFFF" opacity="0.5"/>
+  <path d="M340 120 L345 125 L340 130 L335 125 Z" fill="#FFFFFF" opacity="0.4"/>
+  <path d="M70 200 L75 205 L70 210 L65 205 Z" fill="#FFFFFF" opacity="0.6"/>
+</svg>
