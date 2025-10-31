@@ -299,7 +299,7 @@ export default async function AdminDashboardPage() {
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <Link href="/admin/products">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="shadow-md hover:shadow-lg active:shadow-xl transition-shadow cursor-pointer min-h-[120px] touch-manipulation">
                 <CardHeader>
                   <CardTitle>Manage Products</CardTitle>
                 </CardHeader>
@@ -310,7 +310,7 @@ export default async function AdminDashboardPage() {
             </Link>
 
             <Link href="/admin/orders">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="shadow-md hover:shadow-lg active:shadow-xl transition-shadow cursor-pointer min-h-[120px] touch-manipulation">
                 <CardHeader>
                   <CardTitle>Manage Orders</CardTitle>
                 </CardHeader>
@@ -321,7 +321,7 @@ export default async function AdminDashboardPage() {
             </Link>
 
             <Link href="/admin/reviews">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="shadow-md hover:shadow-lg active:shadow-xl transition-shadow cursor-pointer min-h-[120px] touch-manipulation">
                 <CardHeader>
                   <CardTitle>Manage Reviews</CardTitle>
                 </CardHeader>
@@ -332,7 +332,7 @@ export default async function AdminDashboardPage() {
             </Link>
 
             <Link href="/admin/users">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="shadow-md hover:shadow-lg active:shadow-xl transition-shadow cursor-pointer min-h-[120px] touch-manipulation">
                 <CardHeader>
                   <CardTitle>Manage Users</CardTitle>
                 </CardHeader>
@@ -343,7 +343,7 @@ export default async function AdminDashboardPage() {
             </Link>
 
             <Link href="/admin/discounts">
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <Card className="shadow-md hover:shadow-lg active:shadow-xl transition-shadow cursor-pointer min-h-[120px] touch-manipulation">
                 <CardHeader>
                   <CardTitle>Manage Discounts</CardTitle>
                 </CardHeader>
@@ -365,7 +365,7 @@ export default async function AdminDashboardPage() {
                     {recentOrdersWithProfiles.map((order) => {
                       return (
                         <Link key={order.id} href={`/admin/orders/${order.id}`}>
-                          <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+                          <div className="flex items-center justify-between p-4 border rounded-lg bg-background hover:bg-muted/50 active:bg-muted transition-colors min-h-[72px] touch-manipulation">
                             <div>
                               <p className="font-medium">Order #{order.order_number}</p>
                               <p className="text-sm text-muted-foreground">{order.profile?.full_name || "Guest"}</p>

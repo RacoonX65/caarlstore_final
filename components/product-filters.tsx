@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useRouter, useSearchParams } from "next/navigation"
-import { X } from "lucide-react"
+import { X, Filter } from "lucide-react"
 
 interface ProductFiltersProps {
   categories: string[]
@@ -68,12 +69,12 @@ export function ProductFilters({
 
   const hasActiveFilters = currentCategory || currentMinPrice || currentMaxPrice || currentSort
 
-  return (
+  const FilterContent = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Filters</h2>
         {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={clearFilters}>
+          <Button variant="ghost" size="sm" onClick={clearFilters} className="min-h-[48px] touch-manipulation">
             <X className="h-4 w-4 mr-1" />
             Clear
           </Button>
@@ -103,7 +104,7 @@ export function ProductFilters({
           <Button
             variant={!currentCategory ? "default" : "ghost"}
             size="sm"
-            className="w-full justify-start"
+            className="w-full justify-start min-h-[48px] touch-manipulation"
             onClick={() => updateFilters("category", null)}
           >
             All Categories
@@ -113,7 +114,7 @@ export function ProductFilters({
               key={category}
               variant={currentCategory === category ? "default" : "ghost"}
               size="sm"
-              className="w-full justify-start"
+              className="w-full justify-start min-h-[48px] touch-manipulation"
               onClick={() => updateFilters("category", category)}
             >
               {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -132,7 +133,7 @@ export function ProductFilters({
                 key={subcategory}
                 variant={currentSubcategory === subcategory ? "default" : "ghost"}
                 size="sm"
-                className="w-full justify-start"
+                className="w-full justify-start min-h-[48px] touch-manipulation"
                 onClick={() => updateFilters("subcategory", subcategory)}
               >
                 {subcategory}
@@ -158,11 +159,46 @@ export function ProductFilters({
             <span>R{priceRange[0]}</span>
             <span>R{priceRange[1]}</span>
           </div>
-          <Button size="sm" className="w-full" onClick={applyPriceFilter}>
+          <Button size="sm" className="w-full min-h-[48px] touch-manipulation" onClick={applyPriceFilter}>
             Apply Price Filter
           </Button>
         </div>
       </div>
     </div>
+  )
+
+  return (
+    <>
+      {/* Desktop Filters */}
+      <div className="hidden md:block border-r">
+        <FilterContent />
+      </div>
+      
+      {/* Mobile Filter Sheet */}
+      <div className="md:hidden">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full mb-4 min-h-[48px] touch-manipulation">
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
+              {hasActiveFilters && (
+                <span className="ml-2 bg-primary text-primary-foreground rounded-full px-2 py-1 text-xs">
+                  {[currentCategory, currentSubcategory, currentMinPrice, currentMaxPrice, currentSort].filter(Boolean).length}
+                </span>
+              )}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+            <SheetHeader>
+              <SheetTitle>Product Filters</SheetTitle>
+              <SheetDescription>
+                Filter products by category, price, and more.
+              </SheetDescription>
+            </SheetHeader>
+            <FilterContent />
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   )
 }

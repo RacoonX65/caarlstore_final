@@ -26,7 +26,7 @@ export function ProductCard({ id, name, price, image_url, category, product }: P
   const displayPrice = typeof productData.price === 'number' ? productData.price : 0
 
   return (
-    <Card className="group overflow-hidden border-border hover:shadow-lg transition-shadow duration-300 relative">
+    <Card className="group overflow-hidden border-border shadow-sm hover:shadow-lg active:shadow-xl transition-shadow duration-300 relative min-h-[320px] touch-manipulation">
       <CardContent className="p-0">
         <Link href={`/products/${productData.id}`}>
           <div className="aspect-[3/4] relative overflow-hidden bg-muted">
@@ -34,7 +34,8 @@ export function ProductCard({ id, name, price, image_url, category, product }: P
               src={productData.image_url || `/placeholder.svg?height=600&width=450&query=${encodeURIComponent(productData.name || 'Product')}`}
               alt={productData.name || 'Product'}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
+              className="object-contain group-hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
           </div>
           <div className="p-4 space-y-2">
@@ -43,7 +44,7 @@ export function ProductCard({ id, name, price, image_url, category, product }: P
             <p className="text-lg font-semibold">R {displayPrice.toFixed(2)}</p>
           </div>
         </Link>
-        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-2 right-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
           <WishlistButton productId={productData.id || ''} />
         </div>
       </CardContent>
